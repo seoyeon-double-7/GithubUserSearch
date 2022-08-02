@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.google.gson.GsonBuilder
@@ -48,38 +49,47 @@ class MainActivity : AppCompatActivity() {
 
         find_btn.setOnClickListener {
             val id = userIdInput.text.toString()
-            val apiCallForData = apiService.getUser(id, "token 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")
-            apiCallForData.enqueue(object : Callback<GitHubUser>{
-                override fun onResponse(call: Call<GitHubUser>, response: Response<GitHubUser>) {
-                    Log.d("mytag", response.code().toString())
 
-                    if(response.code().toString().startsWith("4")){
-                        Toast.makeText(this@MainActivity,
-                            "올바른 github 아이디를 다시 입력해주세요",
-                            Toast.LENGTH_SHORT).show()
-                    }else{
-                        val data = response.body()!!
-                        Log.d("mytag", data.toString())
-                        val context = findViewById<TextView>(R.id.context)
-                        val profile_image = findViewById<ImageView>(R.id.image_profile)
+            if(id.isBlank()){
+                Toast.makeText(this,"유저 아이디를 입력하세요.", Toast.LENGTH_SHORT).show()
+            }else {
+                val apiCallForData = apiService.getUser(id, "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")
+                apiCallForData.enqueue(object : Callback<GitHubUser>{
+                    override fun onResponse(call: Call<GitHubUser>, response: Response<GitHubUser>) {
+                        Log.d("mytag", response.code().toString())
 
-                        context.text = "login : ${data.login} \n id : ${data.id} \n name : ${data.name} \n" +
-                                "following : ${data.following.toString()} \n followers : ${data.followers.toString()}"
-                        Glide.with(this@MainActivity)
-                            .load(data.avatarUrl)
-                            .into(profile_image);
+
+                        if(response.code().toString().startsWith("4")){
+                            Toast.makeText(this@MainActivity,
+                                "올바른 github 아이디를 다시 입력해주세요",
+                                Toast.LENGTH_SHORT).show()
+                        }else{
+                            move_btn.visibility = View.VISIBLE
+                            val data = response.body()!!
+                            Log.d("mytag", data.toString())
+                            val context = findViewById<TextView>(R.id.context)
+                            val profile_image = findViewById<ImageView>(R.id.image_profile)
+
+                            context.text = "login : ${data.login} \n id : ${data.id} \n name : ${data.name} \n" +
+                                    "following : ${data.following.toString()} \n followers : ${data.followers.toString()}"
+                            Glide.with(this@MainActivity)
+                                .load(data.avatarUrl)
+                                .into(profile_image);
+                        }
+
+
                     }
 
+                    override fun onFailure(call: Call<GitHubUser>, t: Throwable) {
+                        Toast.makeText(this@MainActivity,
+                            "에러 발생 : ${t.message}",
+                            Toast.LENGTH_SHORT).show()
+                    }
 
-                }
+                })
+            }
 
-                override fun onFailure(call: Call<GitHubUser>, t: Throwable) {
-                    Toast.makeText(this@MainActivity,
-                        "에러 발생 : ${t.message}",
-                        Toast.LENGTH_SHORT).show()
-                }
 
-            })
 
         }
     }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class GithubReposAdapter(val dataList: List<GitRepos>)
     :RecyclerView.Adapter<GithubReposAdapter.ItemViewHolder>()
-{
+    {
     class ItemViewHolder(val view: View): RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -23,7 +23,7 @@ class GithubReposAdapter(val dataList: List<GitRepos>)
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.view.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(dataList[position].htmlUrl.toString()))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(dataList[position].htmlUrl))
             holder.view.context.startActivity(intent)
         }
 

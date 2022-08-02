@@ -20,10 +20,6 @@
         android:textSize="15dp"
         />
 
-
-<!--    val forks_count : Int,
-    val watchers_count : Int,
-    val stargazer_count : Int-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

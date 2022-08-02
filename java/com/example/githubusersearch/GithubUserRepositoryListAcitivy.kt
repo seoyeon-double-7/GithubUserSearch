@@ -28,7 +28,7 @@ class GithubUserRepositoryListAcitivy : AppCompatActivity() {
             .build()
         val apiService = retrofit.create(GitHubAPIService::class.java)
 
-        val apiCallForData = apiService.getRepos(UserId, "token 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")
+        val apiCallForData = apiService.getRepos(UserId, "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")
         apiCallForData.enqueue(object : Callback<List<GitRepos>> {
 
             override fun onResponse(call: Call<List<GitRepos>>, response: Response<List<GitRepos>>) {
